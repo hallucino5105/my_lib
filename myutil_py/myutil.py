@@ -3,15 +3,22 @@
 
 
 import sys
+import pprint
 from datetime import datetime
-from pprint import pprint
+
+
+class MyPrettyPrinter(pprint.PrettyPrinter):
+    def format(self, object, context, maxlevels, level):
+        if isinstance(object, unicode):
+            return (object.encode('utf8'), True, False)
+        return pprint.PrettyPrinter.format(self, object, context, maxlevels, level)
 
 
 def merr(message, newline=True, flush=False):
     if type(message) == str or type(message) == unicode:
         sys.stderr.write(message)
     else:
-        pprint(message, sys.stderr)
+        MyPrettyPrinter(stream=sys.stderr).pprint(message)
 
     if newline:
         sys.stderr.write("\n")
@@ -23,7 +30,7 @@ def mout(message, newline=True, flush=False):
     if type(message) == str or type(message) == unicode:
         sys.stdout.write(message)
     else:
-        pprint(message, sys.stdout)
+        MyPrettyPrinter(stream=sys.stdout).pprint(message)
 
     if newline:
         sys.stdout.write("\n")
