@@ -8,7 +8,7 @@ from pprint import pprint
 
 
 def merr(message, newline=True, flush=False):
-    if type(message) == str:
+    if type(message) == str or type(message) == unicode:
         sys.stderr.write(message)
     else:
         pprint(message, sys.stderr)
@@ -20,7 +20,7 @@ def merr(message, newline=True, flush=False):
 
 
 def mout(message, newline=True, flush=False):
-    if type(message) == str:
+    if type(message) == str or type(message) == unicode:
         sys.stdout.write(message)
     else:
         pprint(message, sys.stdout)
