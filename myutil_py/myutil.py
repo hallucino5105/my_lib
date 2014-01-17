@@ -47,3 +47,9 @@ class myutil:
     def now_string():
         return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
+    @staticmethod
+    def readfile(filepath):
+        with open(filepath, "r") as f:
+            content = f.read()
+        return content
+
