@@ -15,7 +15,7 @@ class MyPrettyPrinter(pprint.PrettyPrinter):
 
 
 def merr(message, newline=True, flush=False):
-    if type(message) == str or type(message) == unicode:
+    if isinstance(message, str) or isinstance(message, unicode):
         sys.stderr.write(message)
     else:
         MyPrettyPrinter(stream=sys.stderr).pprint(message)
@@ -27,7 +27,7 @@ def merr(message, newline=True, flush=False):
 
 
 def mout(message, newline=True, flush=False):
-    if type(message) == str or type(message) == unicode:
+    if isinstance(message, str) or isinstance(message, unicode):
         sys.stdout.write(message)
     else:
         MyPrettyPrinter(stream=sys.stdout).pprint(message)
