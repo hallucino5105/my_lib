@@ -4,7 +4,7 @@
 
 import sys
 import pprint
-from datetime import datetime
+import datetime
 
 
 class MyPrettyPrinter(pprint.PrettyPrinter):
@@ -41,15 +41,19 @@ def mout(message, newline=True, flush=False):
 class myutil:
     @staticmethod
     def now():
-        return datetime.now()
+        return datetime.datetime.now()
 
     @staticmethod
     def now_string():
-        return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     @staticmethod
     def readfile(filepath):
         with open(filepath, "r") as f:
             content = f.read()
         return content
+
+    @staticmethod
+    def str_to_datetime(dt):
+        return datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
 
