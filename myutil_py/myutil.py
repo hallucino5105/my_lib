@@ -67,7 +67,7 @@ class myutil:
             start=datetime.datetime(1970, 01, 01, 00, 00, 00),
             end=datetime.datetime.now(),
             output_format="%Y-%m-%d %H:%M:00"):
-        current = start
+        current = datetime.datetime.strptime(start.strftime(output_format), output_format)
         end = datetime.datetime.strptime(end.strftime(output_format), output_format)
         count = int((end - current).total_seconds() / delta) + 1
 
@@ -83,7 +83,7 @@ class myutil:
     def serialize(filepath, content):
         import msgpack
 
-        with open(filepath, "w+") as f:
+        with open(filepath, "w") as f:
             packed_content = msgpack.packb(content)
             f.write(packed_content)
 
