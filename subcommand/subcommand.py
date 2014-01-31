@@ -6,7 +6,7 @@ import re
 import subprocess
 
 
-class subcommand():
+class mysubcommand():
     def __init__(self, cmd):
         self.cmd = cmd
         self.__execute()
