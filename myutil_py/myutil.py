@@ -2,8 +2,13 @@
 # coding: utf-8
 
 
+# usage:
+# sys.path.append(os.path.expanduser("~/my_lib/myutil_py"))
+# from myutil import myutil
+
 import sys
 import pprint
+import time
 import datetime
 
 
@@ -57,8 +62,24 @@ class myutil:
 
 
     @staticmethod
-    def str_to_datetime(dt):
-        return datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
+    def str_to_datetime(dtime):
+        return datetime.datetime.strptime(dtime, "%Y-%m-%d %H:%M:%S")
+
+
+    @staticmethod
+    def datetime_to_seconds(dtime):
+        return time.mktime(datetime.datetime.timetuple(dtime))
+
+
+    @staticmethod
+    def seconds_to_datetime(seconds):
+        return datetime.datetime.fromtimestamp(seconds)
+
+
+    @staticmethod
+    def datetime_alignment(dtime, interval):
+        s = int(myutil.datetime_to_seconds(dtime))
+        return myutil.seconds_to_datetime(s - s % interval)
 
 
     @staticmethod
@@ -109,4 +130,21 @@ class myutil:
         formatted_text2 = re.sub(r"\s+", " ", formatted_text1)
 
         return formatted_text2
+
+
+    @staticmethod
+    def linear_interpolate(x1, y1, x2):
+        from collections import OrderedDict
+        from scipy import interpolate
+
+        x1_ = [ 0, len(x2)-1 ]
+        x2_ = [ i for i in range(len(x2)) ]
+        f   = interpolate.interp1d(x1_, y1)
+        y2  = f(x2_)
+
+        #mout(x2)
+        #mout(y2)
+        #mout(dict(zip(x2, y2)))
+
+        return zip(x2, y2)
 
