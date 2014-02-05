@@ -100,3 +100,13 @@ class myutil:
             packed_content = f.read()
             return msgpack.unpackb(packed_content)
 
+
+    @staticmethod
+    def trim_text(text):
+        import re
+
+        formatted_text1 = text.replace("\n", "")
+        formatted_text2 = re.sub(r"\s+", " ", formatted_text1)
+
+        return formatted_text2
+
