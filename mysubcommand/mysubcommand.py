@@ -7,15 +7,23 @@ import subprocess
 
 
 class mysubcommand():
-    def __init__(self, cmd):
-        self.cmd = cmd
+    def __init__(self, cmd, sync=True):
+        self.cmd  = cmd
+        self.sync = sync
+
+        self.returncode  = 0
+        self.stdout_data = ""
+        self.stderr_data = ""
+
         self.__execute()
 
 
     def __execute(self):
         p = subprocess.Popen(self.cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        self.stdout_data, self.stderr_data = p.communicate()
-        self.returncode = p.returncode
+
+        if self.sync:
+            self.stdout_data, self.stderr_data = p.communicate()
+            self.returncode = p.returncode
 
 
     # 素直に出力を返す
