@@ -45,6 +45,13 @@ def mout(message, newline=True, flush=False):
 
 class myutil:
     @staticmethod
+    def readfile(filepath):
+        with open(filepath, "r") as f:
+            content = f.read()
+        return content
+
+
+    @staticmethod
     def now():
         return datetime.datetime.now()
 
@@ -55,15 +62,13 @@ class myutil:
 
 
     @staticmethod
-    def readfile(filepath):
-        with open(filepath, "r") as f:
-            content = f.read()
-        return content
+    def datetime_to_str(dtime):
+        return dtime.strftime("%Y-%m-%d %H:%M:%S")
 
 
     @staticmethod
-    def str_to_datetime(dtime):
-        return datetime.datetime.strptime(dtime, "%Y-%m-%d %H:%M:%S")
+    def str_to_datetime(stime):
+        return datetime.datetime.strptime(stime, "%Y-%m-%d %H:%M:%S")
 
 
     @staticmethod
@@ -133,18 +138,25 @@ class myutil:
 
 
     @staticmethod
-    def linear_interpolate(x1, y1, x2):
-        from collections import OrderedDict
+    def interpolate(x1, y1, x2, kind="linear", bounds_error=False, fill_value=0):
+        """ kind = [ "linear", "quadratic", "cubic" ] とか？ """
+
+        from scipy import interpolate
+
+        f  = interpolate.interp1d(x1, y1, kind=kind, bounds_error=bounds_error, fill_value=fill_value)
+        y2 = f(x2)
+
+        return zip(x2, y2)
+
+
+    @staticmethod
+    def interpolate_term(x1, y1, x2, kind="linear"):
         from scipy import interpolate
 
         x1_ = [ 0, len(x2)-1 ]
         x2_ = [ i for i in range(len(x2)) ]
-        f   = interpolate.interp1d(x1_, y1)
+        f   = interpolate.interp1d(x1_, y1, kind=kind)
         y2  = f(x2_)
-
-        #mout(x2)
-        #mout(y2)
-        #mout(dict(zip(x2, y2)))
 
         return zip(x2, y2)
 
