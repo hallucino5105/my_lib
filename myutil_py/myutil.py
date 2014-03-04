@@ -97,7 +97,13 @@ class myutil:
             output_format="%Y-%m-%d %H:%M:00"):
         current = datetime.datetime.strptime(start.strftime(output_format), output_format)
         end = datetime.datetime.strptime(end.strftime(output_format), output_format)
-        count = int((end - current).total_seconds() / delta) + 1
+
+        td = end - current
+        total_seconds = (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
+        #print total_seconds, td.total_seconds()
+
+        #count = int((end - current).total_seconds() / delta) + 1
+        count = int(total_seconds / delta) + 1
 
         datelist = []
         for c in range(count):
