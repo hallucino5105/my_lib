@@ -7,9 +7,11 @@
 # from myutil import myutil
 
 import sys
+import os
 import pprint
 import time
 import datetime
+import re
 
 
 class MyPrettyPrinter(pprint.PrettyPrinter):
@@ -116,7 +118,6 @@ class myutil:
 
     @staticmethod
     def deserialize(filepath):
-        import os
         import msgpack
 
         if not os.path.isfile(filepath):
@@ -129,7 +130,6 @@ class myutil:
 
     @staticmethod
     def trim_text(text):
-        import re
 
         formatted_text1 = text.replace("\n", "")
         formatted_text2 = re.sub(r"\s+", " ", formatted_text1)
@@ -137,26 +137,46 @@ class myutil:
         return formatted_text2
 
 
+    """ kind = [ "linear", "quadratic", "cubic" ] とか？ """
     @staticmethod
-    def interpolate(x1, y1, x2, kind="linear", bounds_error=False, fill_value=0):
-        """ kind = [ "linear", "quadratic", "cubic" ] とか？ """
-
+    def interpolate(x1, y1, x2, x2_alias=None, kind="linear", bounds_error=False, fill_value=0):
         from scipy import interpolate
 
-        f  = interpolate.interp1d(x1, y1, kind=kind, bounds_error=bounds_error, fill_value=fill_value)
-        y2 = f(x2)
+        def x_mapper(x1, x2):
+            x1_i = [ x2.index(v) for v in x1 ]
+            x2_i = [ i for i, v in enumerate(x2) ]
+            return x1_i, x2_i
 
-        return zip(x2, y2)
+        x1_m, x2_m = x_mapper(x1, x2)
+        #print x1_m, x2_m
+
+        f  = interpolate.interp1d(x1_m, y1, kind=kind, bounds_error=bounds_error, fill_value=fill_value)
+        y2 = f(x2_m)
+        #print x1, x2, x1_m, x2_m, y1, y2
+
+        if not x2_alias:
+            return zip(x2, y2)
+        else:
+            return zip(x2_alias, y2)
 
 
     @staticmethod
     def interpolate_term(x1, y1, x2, kind="linear"):
-        from scipy import interpolate
-
         x1_ = [ 0, len(x2)-1 ]
         x2_ = [ i for i in range(len(x2)) ]
-        f   = interpolate.interp1d(x1_, y1, kind=kind)
-        y2  = f(x2_)
 
-        return zip(x2, y2)
+        return myutil.interpolate(x1=x1_, y1=y1, x2=x2_, x2_=x2, kind=kind)
+
+        #f   = interpolate.interp1d(x1_, y1, kind=kind)
+        #y2  = f(x2_)
+
+        #return zip(x2, y2)
+
+    @staticmethod
+    def zip2(*elem):
+        ret = zip(*elem)
+        for i in xrange(len(ret)):
+            ret[i] = list(ret[i])
+
+        return ret
 
