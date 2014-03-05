@@ -21,26 +21,36 @@ class MyPrettyPrinter(pprint.PrettyPrinter):
         return pprint.PrettyPrinter.format(self, object, context, maxlevels, level)
 
 
-def merr(message, newline=True, flush=False):
-    if isinstance(message, str) or isinstance(message, unicode):
-        sys.stderr.write(message)
-    else:
-        MyPrettyPrinter(stream=sys.stderr).pprint(message)
-
-    if newline:
+def merr(message="", newline=True, flush=False):
+    if not message:
         sys.stderr.write("\n")
+
+    else:
+        if isinstance(message, str) or isinstance(message, unicode):
+            sys.stderr.write(message)
+        else:
+            MyPrettyPrinter(stream=sys.stderr).pprint(message)
+
+        if newline:
+            sys.stderr.write("\n")
+
     if flush:
         sys.stderr.flush()
 
 
-def mout(message, newline=True, flush=False):
-    if isinstance(message, str) or isinstance(message, unicode):
-        sys.stdout.write(message)
-    else:
-        MyPrettyPrinter(stream=sys.stdout).pprint(message)
-
-    if newline:
+def mout(message="", newline=True, flush=False):
+    if not message:
         sys.stdout.write("\n")
+
+    else:
+        if isinstance(message, str) or isinstance(message, unicode):
+            sys.stdout.write(message)
+        else:
+            MyPrettyPrinter(stream=sys.stdout).pprint(message)
+
+        if newline:
+            sys.stdout.write("\n")
+
     if flush:
         sys.stdout.flush()
 
