@@ -12,6 +12,7 @@ import pprint
 import time
 import datetime
 import re
+import Queue
 
 
 class MyPrettyPrinter(pprint.PrettyPrinter):
@@ -188,6 +189,8 @@ class myutil:
 
         #return zip(x2, y2)
 
+    # zipだとtupleで帰ってくるので
+    # list版を作る
     @staticmethod
     def zip2(*elem):
         ret = zip(*elem)
