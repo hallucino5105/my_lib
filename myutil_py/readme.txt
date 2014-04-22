@@ -1,2 +1,2 @@
-sys.path.insert(0, os.path.expanduser("~/my_lib/myutil_py"))
-from myutil import mout, merr
+sys.path.extend(["/home/hoshino/my_lib/myutil_py", "/Users/hoshino/my_lib/myutil_py"])
+from myutil_py import myutil, mout, merr
