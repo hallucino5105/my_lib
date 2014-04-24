@@ -199,3 +199,43 @@ class myutil:
 
         return ret
 
+
+    @staticmethod
+    def __buffered_reader(count, file_opener, row_reader):
+        fo = file_opener()
+        row_buf = []
+
+        while True:
+            for i in xrange(count):
+                try:
+                    row = row_reader(fo)
+                    if not row:
+                        yield row_buf
+                        return
+
+                except StopIteration:
+                    yield row_buf
+                    return
+
+                row_buf.append(row)
+
+            yield row_buf
+            row_buf = []
+
+        fo.close()
+
+
+    @staticmethod
+    def buffered_reader(filepath, count=1):
+        file_opener = lambda: open(filepath, "r")
+        row_reader = lambda fo: fo.readline()
+        return myutil.__buffered_reader(count, file_opener, row_reader)
+
+
+    @staticmethod
+    def buffered_reader_csv(filepath, options={ "delimiter": "," }, count=1):
+        import csv
+        file_opener = lambda: csv.reader(open(filepath, "r"), **options)
+        row_reader = lambda fo: fo.next()
+        return myutil.__buffered_reader(count, file_opener, row_reader)
+
