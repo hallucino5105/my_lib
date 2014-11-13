@@ -24,7 +24,7 @@ class MyPrettyPrinter(pprint.PrettyPrinter):
 
 def merr(message="", newline=True, flush=False):
     if not message:
-        sys.stderr.write("\n\n")
+        sys.stderr.write("\n")
 
     else:
         if isinstance(message, str) or isinstance(message, unicode):
