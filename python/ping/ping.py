@@ -6,11 +6,11 @@ import sys
 import os
 
 sys.path.extend([
-    "./my_lib/python/myutil",
-    "/home/hoshino/my_lib/python/myutil",
-    "/Users/hoshino/my_lib/python/myutil",
+    "./my_lib/python",
+    "/home/hoshino/my_lib/python",
+    "/Users/hoshino/my_lib/python",
 ])
-from myutil import myutil, mout, merr
+from myutil.myutil import myutil, mout, merr
 
 
 def ping(hosts):
