@@ -27,15 +27,15 @@ class Filesize():
 
 
     def _splitUnit(self, unitBytes):
-        (byte, unit) = re.match(r"([0-9,]*)([a-zA-Z]*)", unitBytes).groups()
+        (byte, unit) = re.match(r"([0-9\.,]*)([a-zA-Z]*)", unitBytes).groups()
 
         byte = byte.replace(r",", "")
         unit = unit.lower()
 
         if unit not in [ su.lower() for su in Filesize.unit ]:
-            raise ValueError((byte, unit))
+            unit = ""
 
-        return int(byte), unit
+        return float(byte), unit
 
 
     def _getUnitExp(self, unit):
@@ -43,14 +43,14 @@ class Filesize():
             if unit.lower() == fu.lower():
                 return int(math.floor(index / 2))
 
-        raise ValueError(unit)
+        return 0
 
 
     def toRawBytes(self, unitBytes):
         byte, unit = self._splitUnit(unitBytes)
         unitExp = self._getUnitExp(unit)
 
-        return byte * (self.conversionRate ** unitExp)
+        return int(byte * (self.conversionRate ** unitExp))
 
 
     def toUnitBytes(self, rawBytes, targetUnit="MB"):
