@@ -57,64 +57,66 @@ def mout(message="", newline=True, flush=False):
 
 
 class myutil:
-    @staticmethod
-    def readfile(filepath):
+    @classmethod
+    def readfile(cls, filepath):
         with open(filepath, "r") as f:
             content = f.read()
         return content
 
 
-    @staticmethod
-    def now():
+    @classmethod
+    def now(cls):
         return datetime.datetime.now()
 
 
-    @staticmethod
-    def now_string():
+    @classmethod
+    def nowString(cls):
         return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 
-    @staticmethod
-    def datetime_to_str(dtime):
+    @classmethod
+    def datetimeToStr(cls, dtime):
         return dtime.strftime("%Y-%m-%d %H:%M:%S")
 
 
-    @staticmethod
-    def str_to_datetime(stime):
+    @classmethod
+    def strToDatetime(cls, stime):
         return datetime.datetime.strptime(stime, "%Y-%m-%d %H:%M:%S")
 
 
-    @staticmethod
-    def datetime_to_seconds(dtime):
+    @classmethod
+    def datetimeToSeconds(cls, dtime):
         return time.mktime(datetime.datetime.timetuple(dtime))
 
 
-    @staticmethod
-    def seconds_to_datetime(seconds):
+    @classmethod
+    def secondToDatetime(cls, seconds):
         return datetime.datetime.fromtimestamp(seconds)
 
 
-    @staticmethod
-    def datetime_alignment(dtime, interval):
-        s = int(myutil.datetime_to_seconds(dtime))
-        return myutil.seconds_to_datetime(s - s % interval)
+    @classmethod
+    def datetimeAlignment(cls, dtime, interval):
+        s = int(cls.datetimeToSeconds(dtime))
+        return cls.secondsToDatetime(s - s % interval)
 
 
-    @staticmethod
-    def datelist_generator(
-            delta=60,
-            start=datetime.datetime(1970, 01, 01, 00, 00, 00),
-            end=datetime.datetime.now(),
-            output_format="%Y-%m-%d %H:%M:00"):
-        current = datetime.datetime.strptime(start.strftime(output_format), output_format)
-        end = datetime.datetime.strptime(end.strftime(output_format), output_format)
+    @classmethod
+    def datelistGenerator(
+        cls,
+        delta=60,
+        start=datetime.datetime(1970, 01, 01, 00, 00, 00),
+        end=datetime.datetime.now(),
+        outputFormat="%Y-%m-%d %H:%M:00"
+    ):
+        current = datetime.datetime.strptime(start.strftime(outputFormat), outputFormat)
+        end = datetime.datetime.strptime(end.strftime(outputFormat), outputFormat)
 
         td = end - current
-        total_seconds = (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
-        #print total_seconds, td.total_seconds()
+        totalSeconds = (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
+        #print totalSeconds, td.totalSeconds()
 
-        #count = int((end - current).total_seconds() / delta) + 1
-        count = int(total_seconds / delta) + 1
+        #count = int((end - current).totalSeconds() / delta) + 1
+        count = int(totalSeconds / delta) + 1
 
         datelist = []
         for c in range(count):
@@ -124,65 +126,64 @@ class myutil:
         return datelist
 
 
-    @staticmethod
-    def serialize(filepath, content):
+    @classmethod
+    def serialize(cls, filepath, content):
         import msgpack
 
         with open(filepath, "w") as f:
-            packed_content = msgpack.packb(content)
-            f.write(packed_content)
+            packedContent = msgpack.packb(content)
+            f.write(packedContent)
 
 
-    @staticmethod
-    def deserialize(filepath):
+    @classmethod
+    def deserialize(cls, filepath):
         import msgpack
 
         if not os.path.isfile(filepath):
             raise RuntimeError("not found")
 
         with open(filepath, "r") as f:
-            packed_content = f.read()
-            return msgpack.unpackb(packed_content)
+            packedContent = f.read()
+            return msgpack.unpackb(packedContent)
 
 
-    @staticmethod
-    def trim_text(text):
-
-        formatted_text1 = text.replace("\n", "")
-        formatted_text2 = re.sub(r"\s+", " ", formatted_text1)
-
-        return formatted_text2
+    # 連続したスペースを単独スペースに置換する
+    @classmethod
+    def trimText(cls, text, replaceSpace=True, replaceNewLine=False):
+        formattedText = re.sub(r" +", " ", text) if replaceSpace else text
+        formattedText = formattedText.replace("\n", "") if replaceNewLine else formattedText
+        return formattedText
 
 
     """ kind = [ "linear", "quadratic", "cubic" ] とか？ """
-    @staticmethod
-    def interpolate(x1, y1, x2, x2_alias=None, kind="linear", bounds_error=False, fill_value=0):
+    @classmethod
+    def interpolate(cls, x1, y1, x2, x2Alias=None, kind="linear", boundsError=False, fillValue=0):
         from scipy import interpolate
 
-        def x_mapper(x1, x2):
-            x1_i = [ x2.index(v) for v in x1 ]
-            x2_i = [ i for i, v in enumerate(x2) ]
-            return x1_i, x2_i
+        def xMapper(x1, x2):
+            x1i = [ x2.index(v) for v in x1 ]
+            x2i = [ i for i, v in enumerate(x2) ]
+            return x1i, x2i
 
-        x1_m, x2_m = x_mapper(x1, x2)
-        #print x1_m, x2_m
+        x1m, x2m = xMapper(x1, x2)
+        #print x1m, x2m
 
-        f  = interpolate.interp1d(x1_m, y1, kind=kind, bounds_error=bounds_error, fill_value=fill_value)
-        y2 = f(x2_m)
-        #print x1, x2, x1_m, x2_m, y1, y2
+        f  = interpolate.interp1d(x1m, y1, kind=kind, boundsError=boundsError, fillValue=fillValue)
+        y2 = f(x2m)
+        #print x1, x2, x1m, x2m, y1, y2
 
-        if not x2_alias:
+        if not x2Alias:
             return zip(x2, y2)
         else:
-            return zip(x2_alias, y2)
+            return zip(x2Alias, y2)
 
 
-    @staticmethod
-    def interpolate_term(x1, y1, x2, kind="linear"):
+    @classmethod
+    def interpolateTerm(cls, x1, y1, x2, kind="linear"):
         x1_ = [ 0, len(x2)-1 ]
         x2_ = [ i for i in range(len(x2)) ]
 
-        return myutil.interpolate(x1=x1_, y1=y1, x2=x2_, x2_=x2, kind=kind)
+        return cls.interpolate(x1=x1_, y1=y1, x2=x2_, x2_=x2, kind=kind)
 
         #f   = interpolate.interp1d(x1_, y1, kind=kind)
         #y2  = f(x2_)
@@ -191,8 +192,8 @@ class myutil:
 
     # zipだとtupleで帰ってくるので
     # list版を作る
-    @staticmethod
-    def zip2(*elem):
+    @classmethod
+    def zip2(cls, *elem):
         ret = zip(*elem)
         for i in xrange(len(ret)):
             ret[i] = list(ret[i])
@@ -200,42 +201,42 @@ class myutil:
         return ret
 
 
-    @staticmethod
-    def __buffered_reader(count, file_opener, row_reader):
-        fo = file_opener()
-        row_buf = []
+    @classmethod
+    def __bufferedReader(cls, count, fileOpener, rowReader):
+        fo = fileOpener()
+        rowBuf = []
 
         while True:
             for i in xrange(count):
                 try:
-                    row = row_reader(fo)
+                    row = rowReader(fo)
                     if not row:
-                        yield row_buf
+                        yield rowBuf
                         return
 
                 except StopIteration:
-                    yield row_buf
+                    yield rowBuf
                     return
 
-                row_buf.append(row)
+                rowBuf.append(row)
 
-            yield row_buf
-            row_buf = []
+            yield rowBuf
+            rowBuf = []
 
         fo.close()
 
 
-    @staticmethod
-    def buffered_reader(filepath, count=1):
-        file_opener = lambda: open(filepath, "r")
-        row_reader = lambda fo: fo.readline()
-        return myutil.__buffered_reader(count, file_opener, row_reader)
+    @classmethod
+    def bufferedReader(cls, filepath, count=1):
+        fileOpener = lambda: open(filepath, "r")
+        rowReader = lambda fo: fo.readline()
+        return cls.__bufferedReader(count, fileOpener, rowReader)
 
 
-    @staticmethod
-    def buffered_reader_csv(filepath, options={ "delimiter": ",", "lineterminator": "\n" }, count=1):
+    @classmethod
+    def bufferedReaderCSV(cls, filepath, options={ "delimiter": ",", "lineterminator": "\n" }, count=1):
         import csv
-        file_opener = lambda: csv.reader(open(filepath, "r"), **options)
-        row_reader = lambda fo: fo.next()
-        return myutil.__buffered_reader(count, file_opener, row_reader)
+        fileOpener = lambda: csv.reader(open(filepath, "r"), **options)
+        rowReader = lambda fo: fo.next()
+        return cls.__bufferedReader(count, fileOpener, rowReader)
 
