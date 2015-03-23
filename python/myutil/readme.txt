@@ -1,6 +1,6 @@
 sys.path.extend([
-    "./my_lib/myutil_py",
-    "/home/hoshino/my_lib/myutil_py",
-    "/Users/hoshino/my_lib/myutil_py",
+    "./my_lib/python",
+    "/home/hoshino/my_lib/python",
+    "/Users/hoshino/my_lib/python",
 ])
-from myutil import myutil, mout, merr
+from myutil.myutil import myutil, mout, merr
