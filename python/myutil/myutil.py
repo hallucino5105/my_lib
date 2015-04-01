@@ -70,18 +70,18 @@ class myutil:
 
 
     @classmethod
-    def nowString(cls):
-        return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    def nowString(cls, fmt="%Y-%m-%d %H:%M:%S"):
+        return datetime.datetime.now().strftime(fmt)
 
 
     @classmethod
-    def datetimeToStr(cls, dtime):
-        return dtime.strftime("%Y-%m-%d %H:%M:%S")
+    def datetimeToStr(cls, dtime, fmt="%Y-%m-%d %H:%M:%S"):
+        return dtime.strftime(fmt)
 
 
     @classmethod
-    def strToDatetime(cls, stime):
-        return datetime.datetime.strptime(stime, "%Y-%m-%d %H:%M:%S")
+    def strToDatetime(cls, stime, fmt="%Y-%m-%d %H:%M:%S"):
+        return datetime.datetime.strptime(stime, fmt)
 
 
     @classmethod
