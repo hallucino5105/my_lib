@@ -13,6 +13,7 @@ import time
 import datetime
 import re
 import Queue
+import random
 
 
 class MyPrettyPrinter(pprint.PrettyPrinter):
@@ -239,4 +240,11 @@ class myutil:
         fileOpener = lambda: csv.reader(open(filepath, "r"), **options)
         rowReader = lambda fo: fo.next()
         return cls.__bufferedReader(count, fileOpener, rowReader)
+
+
+    @classmethod
+    def randomStringGenerator(cls, n):
+        source_str = 'abcdefghijklmnopqrstuvwxyz'
+        random.choice(source_str) # a〜zでランダムに１文字
+        return "".join([ random.choice(source_str) for x in xrange(n) ])
 
