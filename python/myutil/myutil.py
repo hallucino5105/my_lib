@@ -240,3 +240,11 @@ class myutil:
         rowReader = lambda fo: fo.next()
         return cls.__bufferedReader(count, fileOpener, rowReader)
 
+
+    @classmethod
+    def randomString(cls, size):
+        import random
+        source_str = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+        random.choice(source_str)
+        return "".join([random.choice(source_str) for x in xrange(size)])
+
