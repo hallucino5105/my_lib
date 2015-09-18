@@ -300,6 +300,15 @@ class myutil:
 
         return [ datetime.datetime.strftime(datetime.datetime.fromtimestamp(_start + s), fmt) for s in seconds ]
 
+        #ret = []
+        #for s in seconds:
+        #    try:
+        #        ret.append(datetime.dateimt.strftime(datetime.datetime.timestamp(_start + s), fmt))
+        #    except Exception:
+        #        pass
+
+        #return ret
+
 
     @classmethod
     def benchmark(cls, func, *args):
